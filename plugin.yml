@@ -1,0 +1,12 @@
+name: MGSeaBattle
+main: com.comze_instancelabs.mgseabattle.Main
+version: 1.0.0
+author: InstanceLabs
+softdepend: [Vault, MinigamesLib]
+depend: [MinigamesLib]
+loadbefore: [MinigamesLib]
+commands:
+   sb:
+      description: Main command
+      usage: /seabattle [action]
+      aliases: [seabattle, mgseabattle, boatgame]
