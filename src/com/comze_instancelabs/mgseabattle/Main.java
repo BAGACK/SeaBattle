@@ -3,6 +3,7 @@ package com.comze_instancelabs.mgseabattle;
 import java.util.ArrayList;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -49,9 +50,11 @@ public class Main extends JavaPlugin implements Listener {
 	ExtraScoreboard xscore;
 	ICommandHandler cmdhandler = new ICommandHandler();
 
+	String you_lost_a_life = "&cYou lost a life. Lives left: <count>";
+
 	public void onEnable() {
 		m = this;
-		api = MinigamesAPI.getAPI().setupAPI(this, "seabattle", IArena.class, new ArenasConfig(this), new MessagesConfig(this), new IClassesConfig(this), new StatsConfig(this, false), new DefaultConfig(this, false), false);
+		api = MinigamesAPI.getAPI().setupAPI(this, "seabattle", IArena.class, new ArenasConfig(this), new IMessagesConfig(this), new IClassesConfig(this), new StatsConfig(this, false), new DefaultConfig(this, false), false);
 		PluginInstance pinstance = api.pinstances.get(this);
 		pinstance.addLoadedArenas(loadArenas(this, pinstance.getArenasConfig()));
 		Bukkit.getPluginManager().registerEvents(this, this);
@@ -61,6 +64,9 @@ public class Main extends JavaPlugin implements Listener {
 		this.getConfig().addDefault("config.default_player_lives", lives);
 		this.getConfig().options().copyDefaults(true);
 		this.saveConfig();
+
+		boat_health = this.getConfig().getInt("config.default_boat_health");
+		lives = this.getConfig().getInt("config.default_player_lives");
 
 		pli = pinstance;
 
@@ -122,6 +128,8 @@ public class Main extends JavaPlugin implements Listener {
 					if (currentlife > 0) {
 						a.plives.put(p.getName(), currentlife);
 						// player still has a life, respawn
+						event.getVehicle().eject();
+						event.getVehicle().remove();
 						Util.teleportPlayerFixed(p, a.getSpawns().get(a.pspawn.get(p.getName())));
 						final Boat b = p.getWorld().spawn(p.getLocation(), Boat.class);
 						Bukkit.getScheduler().runTaskLater(this, new Runnable() {
@@ -129,8 +137,7 @@ public class Main extends JavaPlugin implements Listener {
 								b.setPassenger(p);
 							}
 						}, 5L);
-						// TODO message
-						p.sendMessage("You lost a life. Left: " + currentlife);
+						p.sendMessage(ChatColor.translateAlternateColorCodes('&', you_lost_a_life.replaceAll("<count>", Integer.toString(currentlife))));
 						currenthealth = boat_health;
 						a.boathp.put(p.getName(), currenthealth);
 					} else {
