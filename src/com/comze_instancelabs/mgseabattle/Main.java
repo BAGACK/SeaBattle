@@ -169,23 +169,28 @@ public class Main extends JavaPlugin implements Listener {
 			IArena a = (IArena) pli.global_players.get(p.getName());
 			if (a.getArenaState() != ArenaState.INGAME) {
 				Location l = p.getLocation();
-				Location spawn = a.getSpawns().get(a.pspawn.get(p.getName()));
-				if (Math.abs(l.getBlockX() - spawn.getBlockX()) > 2 || Math.abs(l.getBlockZ() - spawn.getBlockZ()) > 2) {
-					// player moved away from spawn while game not started
-					if (p.isInsideVehicle()) {
-						Vehicle v = (Vehicle) p.getVehicle();
-						v.eject();
-						v.remove();
-						final Boat b = p.getWorld().spawn(spawn, Boat.class);
-						Bukkit.getScheduler().runTaskLater(this, new Runnable() {
-							public void run() {
-								b.setPassenger(p);
+				try {
+					if (a.pspawn.containsKey(p.getName())) {
+						Location spawn = a.getSpawns().get(a.pspawn.get(p.getName()));
+						if (Math.abs(l.getBlockX() - spawn.getBlockX()) > 2 || Math.abs(l.getBlockZ() - spawn.getBlockZ()) > 2) {
+							// player moved away from spawn while game not started
+							if (p.isInsideVehicle()) {
+								Vehicle v = (Vehicle) p.getVehicle();
+								v.eject();
+								v.remove();
+								final Boat b = p.getWorld().spawn(spawn, Boat.class);
+								Bukkit.getScheduler().runTaskLater(this, new Runnable() {
+									public void run() {
+										b.setPassenger(p);
+									}
+								}, 5L);
 							}
-						}, 5L);
+						}
 					}
+				} catch (Exception e) {
+					System.out.println("Couldn't find spawn.");
 				}
 			}
 		}
 	}
-
 }
