@@ -32,11 +32,11 @@ public class ExtraScoreboard {
 
 			objective.setDisplayName(ChatColor.AQUA + "Lives");
 
-			board.resetScores(p_);
+			board.resetScores(Bukkit.getOfflinePlayer(p_));
 			if (!a.plives.containsKey(p_)) {
 				a.plives.put(p_, plugin.lives);
 			}
-			objective.getScore(p_).setScore(a.plives.get(p_));
+			objective.getScore(Bukkit.getOfflinePlayer(p_)).setScore(a.plives.get(p_));
 
 			p.setScoreboard(board);
 		}
