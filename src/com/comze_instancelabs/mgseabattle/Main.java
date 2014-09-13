@@ -111,11 +111,17 @@ public class Main extends JavaPlugin implements Listener {
 
 	@EventHandler
 	public void onVehicleDamage(VehicleDamageEvent event) {
-		if (event.getVehicle().getPassenger() instanceof Player) {
+		if (event.getVehicle().getPassenger() instanceof Player && event.getAttacker() instanceof Player) {
 			final Player p = (Player) event.getVehicle().getPassenger();
-			if (pli.global_players.containsKey(p.getName())) {
-				//event.getVehicle().setVelocity(new Vector(0D, 0D, 0D));
+			final Player attacker = (Player) event.getAttacker();
+			if (pli.global_players.containsKey(p.getName()) && pli.global_players.containsKey(attacker.getName())) {
+				// event.getVehicle().setVelocity(new Vector(0D, 0D, 0D));
 				event.setCancelled(true);
+
+				if (p.getName().equalsIgnoreCase(attacker.getName())) {
+					// disallow players to shoot their own boat
+					return;
+				}
 
 				IArena a = (IArena) pli.global_players.get(p.getName());
 
