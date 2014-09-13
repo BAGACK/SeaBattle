@@ -1,6 +1,7 @@
 package com.comze_instancelabs.mgseabattle;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
@@ -29,7 +30,7 @@ public class ExtraScoreboard {
 
 			objective.setDisplaySlot(DisplaySlot.BELOW_NAME);
 
-			objective.setDisplayName("�3Lives");
+			objective.setDisplayName(ChatColor.AQUA + "Lives");
 
 			board.resetScores(p_);
 			if (!a.plives.containsKey(p_)) {
