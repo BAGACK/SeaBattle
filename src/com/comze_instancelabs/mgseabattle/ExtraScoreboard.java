@@ -29,7 +29,7 @@ public class ExtraScoreboard {
 
 			objective.setDisplaySlot(DisplaySlot.BELOW_NAME);
 
-			objective.setDisplayName("§3Lives");
+			objective.setDisplayName("ï¿½3Lives");
 
 			board.resetScores(p_);
 			if (!a.plives.containsKey(p_)) {

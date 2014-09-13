@@ -114,7 +114,7 @@ public class Main extends JavaPlugin implements Listener {
 		if (event.getVehicle().getPassenger() instanceof Player) {
 			final Player p = (Player) event.getVehicle().getPassenger();
 			if (pli.global_players.containsKey(p.getName())) {
-				event.getVehicle().setVelocity(new Vector(0D, 0D, 0D));
+				//event.getVehicle().setVelocity(new Vector(0D, 0D, 0D));
 				event.setCancelled(true);
 
 				IArena a = (IArena) pli.global_players.get(p.getName());
