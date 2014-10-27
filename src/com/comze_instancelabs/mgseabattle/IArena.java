@@ -25,6 +25,8 @@ public class IArena extends Arena {
 	HashMap<String, Integer> boathp = new HashMap<String, Integer>(); // player -> boat hp
 	HashMap<String, Integer> pspawn = new HashMap<String, Integer>(); // player -> spawn id
 
+	ArrayList<String> ptwokills = new ArrayList<String>();
+
 	public IArena(Main plugin, String name) {
 		super(plugin, name);
 		this.plugin = plugin;
@@ -48,10 +50,20 @@ public class IArena extends Arena {
 
 	@Override
 	public void stop() {
+		ArrayList<String> temp = new ArrayList<String>(this.getAllPlayers());
+		for (String p_ : temp) {
+			if (plives.containsKey(p_)) {
+				if (plives.get(p_) >= plugin.lives) {
+					// player hasn't lost any lives
+					pli.getArenaAchievements().setAchievementDone(p_, "win_game_with_full_lives", false);
+				}
+			}
+		}
 		super.stop();
 		plives.clear();
 		boathp.clear();
 		pspawn.clear();
+		ptwokills.clear();
 	}
 
 	@Override

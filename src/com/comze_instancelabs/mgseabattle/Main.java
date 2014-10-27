@@ -1,5 +1,6 @@
 package com.comze_instancelabs.mgseabattle;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 
 import org.bukkit.Bukkit;
@@ -77,6 +78,19 @@ public class Main extends JavaPlugin implements Listener {
 		pli = pinstance;
 
 		xscore = new ExtraScoreboard(this);
+
+		boolean continue_ = false;
+		for (Method m : pli.getArenaAchievements().getClass().getMethods()) {
+			if (m.getName().equalsIgnoreCase("addDefaultAchievement")) {
+				continue_ = true;
+			}
+		}
+		if (continue_) {
+			pli.getArenaAchievements().addDefaultAchievement("kill_two_boats_in_one_game", "Sink two boats in one game!", 50);
+			pli.getArenaAchievements().addDefaultAchievement("win_game_with_full_lives", "Win a game without losing a life!", 100);
+			pli.getAchievementsConfig().getConfig().options().copyDefaults(true);
+			pli.getAchievementsConfig().saveConfig();
+		}
 	}
 
 	public static ArrayList<Arena> loadArenas(JavaPlugin plugin, ArenasConfig cf) {
@@ -157,6 +171,11 @@ public class Main extends JavaPlugin implements Listener {
 						event.getVehicle().eject();
 						event.getVehicle().remove();
 						a.spectate(p.getName());
+						if (a.ptwokills.contains(attacker.getName())) {
+							pli.getArenaAchievements().setAchievementDone(attacker.getName(), "kill_two_boats_in_one_game", false);
+						} else {
+							a.ptwokills.add(attacker.getName());
+						}
 					}
 					xscore.updateScoreboard(a);
 				}
