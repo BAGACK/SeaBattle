@@ -30,7 +30,7 @@ public class ExtraScoreboard {
 
 			objective.setDisplaySlot(DisplaySlot.BELOW_NAME);
 
-			objective.setDisplayName(ChatColor.AQUA + "Lives");
+			objective.setDisplayName(ChatColor.RED + "Lives ");
 
 			board.resetScores(Bukkit.getOfflinePlayer(p_));
 			if (!a.plives.containsKey(p_)) {

@@ -26,10 +26,8 @@ import com.comze_instancelabs.minigamesapi.ArenaSetup;
 import com.comze_instancelabs.minigamesapi.ArenaState;
 import com.comze_instancelabs.minigamesapi.MinigamesAPI;
 import com.comze_instancelabs.minigamesapi.PluginInstance;
-import com.comze_instancelabs.minigamesapi.commands.CommandHandler;
 import com.comze_instancelabs.minigamesapi.config.ArenasConfig;
 import com.comze_instancelabs.minigamesapi.config.DefaultConfig;
-import com.comze_instancelabs.minigamesapi.config.MessagesConfig;
 import com.comze_instancelabs.minigamesapi.config.StatsConfig;
 import com.comze_instancelabs.minigamesapi.util.Util;
 import com.comze_instancelabs.minigamesapi.util.Validator;
@@ -55,8 +53,9 @@ public class Main extends JavaPlugin implements Listener {
 
 	public void onEnable() {
 		m = this;
-		api = MinigamesAPI.getAPI().setupAPI(this, "seabattle", IArena.class, new ArenasConfig(this), new IMessagesConfig(this), new IClassesConfig(this), new StatsConfig(this, false), new DefaultConfig(this, false), false);
-		PluginInstance pinstance = api.pinstances.get(this);
+		MinigamesAPI.getAPI();
+		api = MinigamesAPI.setupAPI(this, "seabattle", IArena.class, new ArenasConfig(this), new IMessagesConfig(this), new IClassesConfig(this), new StatsConfig(this, false), new DefaultConfig(this, false), false);
+		PluginInstance pinstance = MinigamesAPI.pinstances.get(this);
 		pinstance.addLoadedArenas(loadArenas(this, pinstance.getArenasConfig()));
 		Bukkit.getPluginManager().registerEvents(this, this);
 		pinstance.arenaSetup = new ArenaSetup();
@@ -109,7 +108,8 @@ public class Main extends JavaPlugin implements Listener {
 
 	public static IArena initArena(String arena) {
 		IArena a = new IArena(m, arena);
-		ArenaSetup s = MinigamesAPI.getAPI().pinstances.get(m).arenaSetup;
+		MinigamesAPI.getAPI();
+		ArenaSetup s = MinigamesAPI.pinstances.get(m).arenaSetup;
 		a.init(Util.getSignLocationFromArena(m, arena), Util.getAllSpawns(m, arena), Util.getMainLobby(m), Util.getComponentForArena(m, arena, "lobby"), s.getPlayerCount(m, arena, true), s.getPlayerCount(m, arena, false), s.getArenaVIP(m, arena));
 		return a;
 	}
@@ -135,7 +135,7 @@ public class Main extends JavaPlugin implements Listener {
 			final Player p = (Player) event.getVehicle().getPassenger();
 			final Player attacker = (Player) event.getAttacker();
 			if (pli.global_players.containsKey(p.getName()) && pli.global_players.containsKey(attacker.getName())) {
-				// event.getVehicle().setVelocity(new Vector(0D, 0D, 0D));
+				 event.getVehicle().setVelocity(new Vector(0D, 0.5D, 0D));
 				event.setCancelled(true);
 
 				if (p.getName().equalsIgnoreCase(attacker.getName())) {
@@ -167,7 +167,6 @@ public class Main extends JavaPlugin implements Listener {
 						currenthealth = boat_health;
 						a.boathp.put(p.getName(), currenthealth);
 					} else {
-						// player lost, remove boat and spectate
 						event.getVehicle().eject();
 						event.getVehicle().remove();
 						a.spectate(p.getName());
@@ -204,7 +203,6 @@ public class Main extends JavaPlugin implements Listener {
 					if (a.pspawn.containsKey(p.getName())) {
 						Location spawn = a.getSpawns().get(a.pspawn.get(p.getName()));
 						if (Math.abs(l.getBlockX() - spawn.getBlockX()) > 2 || Math.abs(l.getBlockZ() - spawn.getBlockZ()) > 2) {
-							// player moved away from spawn while game not started
 							if (p.isInsideVehicle()) {
 								Vehicle v = (Vehicle) p.getVehicle();
 								v.eject();
