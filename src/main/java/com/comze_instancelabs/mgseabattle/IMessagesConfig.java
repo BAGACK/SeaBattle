@@ -1,7 +1,5 @@
 package com.comze_instancelabs.mgseabattle;
 
-import org.bukkit.plugin.java.JavaPlugin;
-
 import com.comze_instancelabs.minigamesapi.config.MessagesConfig;
 
 public class IMessagesConfig extends MessagesConfig {

@@ -9,7 +9,6 @@ import org.bukkit.entity.Boat;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Vehicle;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import com.comze_instancelabs.minigamesapi.Arena;
 import com.comze_instancelabs.minigamesapi.MinigamesAPI;
@@ -30,7 +29,8 @@ public class IArena extends Arena {
 	public IArena(Main plugin, String name) {
 		super(plugin, name);
 		this.plugin = plugin;
-		pli = MinigamesAPI.getAPI().pinstances.get(plugin);
+		MinigamesAPI.getAPI();
+		pli = MinigamesAPI.pinstances.get(plugin);
 	}
 
 	@Override
