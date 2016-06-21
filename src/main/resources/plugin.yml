@@ -1,6 +1,6 @@
 name: MGSeaBattle
 main: com.comze_instancelabs.mgseabattle.Main
-version: 1.1.2
+version: ${version}
 author: [InstanceLabs,mepeisen]
 softdepend: [Vault, MinigamesLib]
 depend: [MinigamesLib]
