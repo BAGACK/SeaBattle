@@ -96,7 +96,7 @@ public class IArena extends Arena {
 						public void run() {
 							if (p.isOnline()) {
 								if (!p.isInsideVehicle()) {
-									System.out.println("Player appeared not to be in a vehicle, trying to fix.");
+									IArena.this.getPlugin().getLogger().warning("Player appeared not to be in a vehicle, trying to fix.");
 									Boat b = (Boat) p.getWorld().spawnEntity(p.getLocation(), EntityType.BOAT);
 									b.setPassenger(p);
 								}
