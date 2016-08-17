@@ -2,6 +2,7 @@ package com.comze_instancelabs.mgseabattle;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -60,12 +61,7 @@ public class Main extends JavaPlugin implements Listener {
 		pinstance.addLoadedArenas(loadArenas(this, pinstance.getArenasConfig()));
 		Bukkit.getPluginManager().registerEvents(this, this);
 		pinstance.arenaSetup = new ArenaSetup();
-		try {
-			pinstance.getClass().getMethod("setAchievementGuiEnabled", boolean.class);
-			pinstance.setAchievementGuiEnabled(true);
-		} catch (NoSuchMethodException e) {
-			System.out.println("Update your MinigamesLib to the latest version to use the Achievement Gui.");
-		}
+		pinstance.setAchievementGuiEnabled(true);
 
 		this.getConfig().addDefault("config.default_boat_health", boat_health);
 		this.getConfig().addDefault("config.default_player_lives", lives);
@@ -218,7 +214,7 @@ public class Main extends JavaPlugin implements Listener {
 						}
 					}
 				} catch (Exception e) {
-					System.out.println("Couldn't find spawn.");
+					getLogger().log(Level.SEVERE, "Couldn't find spawn.", e);
 				}
 			}
 		}
