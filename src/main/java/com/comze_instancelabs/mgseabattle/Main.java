@@ -19,6 +19,7 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.vehicle.VehicleDamageEvent;
 import org.bukkit.event.vehicle.VehicleDestroyEvent;
 import org.bukkit.event.vehicle.VehicleExitEvent;
+import org.bukkit.event.vehicle.VehicleMoveEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.Vector;
 
@@ -188,35 +189,5 @@ public class Main extends JavaPlugin implements Listener {
 			}
 		}
 	}
-
-	@EventHandler
-	public void onPlayerMove(PlayerMoveEvent event) {
-		final Player p = event.getPlayer();
-		if (pli.global_players.containsKey(p.getName())) {
-			IArena a = (IArena) pli.global_players.get(p.getName());
-			if (a.getArenaState() != ArenaState.INGAME) {
-				Location l = p.getLocation();
-				try {
-					if (a.pspawn.containsKey(p.getName())) {
-						Location spawn = a.getSpawns().get(a.pspawn.get(p.getName()));
-						if (Math.abs(l.getBlockX() - spawn.getBlockX()) > 2 || Math.abs(l.getBlockZ() - spawn.getBlockZ()) > 2) {
-							if (p.isInsideVehicle()) {
-								Vehicle v = (Vehicle) p.getVehicle();
-								v.eject();
-								v.remove();
-								final Boat b = p.getWorld().spawn(spawn, Boat.class);
-								Bukkit.getScheduler().runTaskLater(this, new Runnable() {
-									public void run() {
-										b.setPassenger(p);
-									}
-								}, 5L);
-							}
-						}
-					}
-				} catch (Exception e) {
-					getLogger().log(Level.SEVERE, "Couldn't find spawn.", e);
-				}
-			}
-		}
-	}
+	
 }
