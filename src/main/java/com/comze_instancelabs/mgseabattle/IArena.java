@@ -5,12 +5,15 @@ import java.util.HashMap;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Boat;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Vehicle;
+import org.bukkit.util.Vector;
 
 import com.comze_instancelabs.minigamesapi.Arena;
+import com.comze_instancelabs.minigamesapi.ArenaType;
 import com.comze_instancelabs.minigamesapi.MinigamesAPI;
 import com.comze_instancelabs.minigamesapi.PluginInstance;
 import com.comze_instancelabs.minigamesapi.util.Util;
@@ -27,7 +30,7 @@ public class IArena extends Arena {
 	ArrayList<String> ptwokills = new ArrayList<String>();
 
 	public IArena(Main plugin, String name) {
-		super(plugin, name);
+		super(plugin, name, ArenaType.REGENERATION);
 		this.plugin = plugin;
 		MinigamesAPI.getAPI();
 		pli = MinigamesAPI.pinstances.get(plugin);
@@ -67,6 +70,29 @@ public class IArena extends Arena {
 	}
 
 	@Override
+	public void started()
+	{
+		super.started();
+		
+		// spawn boats
+		for (String p_ : this.getAllPlayers()) {
+			final Player p = Bukkit.getPlayer(p_);
+			final Block block = p.getLocation().add(new Vector(0, -1, 0)).getBlock();
+			if (block.getType() != Material.WATER)
+			{
+				this.getSmartReset().addChanged(block);
+				block.setType(Material.WATER);
+			}
+			final Boat b = p.getWorld().spawn(p.getLocation(), Boat.class);
+			Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
+				public void run() {
+					b.setPassenger(p);
+				}
+			}, 1L);
+		}
+	}
+
+	@Override
 	public void start(boolean tp) {
 		super.start(false);
 
@@ -79,32 +105,10 @@ public class IArena extends Arena {
 		// tp
 		teleportAllPlayers(this.getAllPlayers(), this.getSpawns());
 
-		// spawn boats
+		// update scoreboard
 		final IArena a = this;
 		Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
 			public void run() {
-				for (String p_ : a.getAllPlayers()) {
-					final Player p = Bukkit.getPlayer(p_);
-					final Boat b = p.getWorld().spawn(p.getLocation(), Boat.class);
-					Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
-						public void run() {
-							b.setPassenger(p);
-						}
-					}, 5L);
-					// TODO remove afterwards:
-					Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
-						public void run() {
-							if (p.isOnline()) {
-								if (!p.isInsideVehicle()) {
-									IArena.this.getPlugin().getLogger().warning("Player appeared not to be in a vehicle, trying to fix.");
-									Boat b = (Boat) p.getWorld().spawnEntity(p.getLocation(), EntityType.BOAT);
-									b.setPassenger(p);
-								}
-							}
-						}
-					}, 25L);
-				}
-
 				plugin.xscore.updateScoreboard(a);
 			}
 		}, 15L);
