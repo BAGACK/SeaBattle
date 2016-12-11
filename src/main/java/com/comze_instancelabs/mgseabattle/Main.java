@@ -66,6 +66,7 @@ public class Main extends JavaPlugin implements Listener {
 
 		this.getConfig().addDefault("config.default_boat_health", boat_health);
 		this.getConfig().addDefault("config.default_player_lives", lives);
+		this.getConfig().addDefault("config.die_below_bedrock_level", 4);
 		this.getConfig().options().copyDefaults(true);
 		this.saveConfig();
 
@@ -82,6 +83,19 @@ public class Main extends JavaPlugin implements Listener {
 				continue_ = true;
 			}
 		}
+		
+		if (this.getConfig().isBoolean("config.die_below_bedrock_level"))
+		{
+			boolean die_below_zero = this.getConfig().getBoolean("config.die_below_bedrock_level");
+			if (die_below_zero) {
+				pli.getArenaListener().loseY = 100;
+			}
+		}
+		else
+		{
+			pli.getArenaListener().loseY = this.getConfig().getInt("config.die_below_bedrock_level");
+		}
+		
 		if (continue_) {
 			pli.getArenaAchievements().addDefaultAchievement("kill_two_boats_in_one_game", "Sink two boats in one game!", 50);
 			pli.getArenaAchievements().addDefaultAchievement("win_game_with_full_lives", "Win a game without losing a life!", 100);
