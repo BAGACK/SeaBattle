@@ -67,11 +67,17 @@ public class IArena extends Arena {
 		boathp.clear();
 		pspawn.clear();
 		ptwokills.clear();
+		
+		// really destroy all boats
+		Util.clearEntites(getBoundaries(), p -> p instanceof Boat);
 	}
 
 	@Override
 	public void started()
 	{
+		// really destroy all boats being present from a previous match
+		Util.clearEntites(getBoundaries(), p -> p instanceof Boat);
+		
 		super.started();
 		
 		// spawn boats
