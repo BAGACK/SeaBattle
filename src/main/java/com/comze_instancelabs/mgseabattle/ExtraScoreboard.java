@@ -7,6 +7,8 @@ import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 
+import com.comze_instancelabs.minigamesapi.util.ArenaScoreboard;
+
 public class ExtraScoreboard {
 
 	Scoreboard board;
@@ -32,11 +34,11 @@ public class ExtraScoreboard {
 
 			objective.setDisplayName(ChatColor.RED + "Lives ");
 
-			board.resetScores(Bukkit.getOfflinePlayer(p_));
+			ArenaScoreboard.reset(board, p_);
 			if (!a.plives.containsKey(p_)) {
 				a.plives.put(p_, plugin.lives);
 			}
-			objective.getScore(Bukkit.getOfflinePlayer(p_)).setScore(a.plives.get(p_));
+			ArenaScoreboard.get(objective, p_).setScore(a.plives.get(p_));
 
 			p.setScoreboard(board);
 		}
