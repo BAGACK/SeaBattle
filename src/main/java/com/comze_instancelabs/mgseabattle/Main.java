@@ -51,11 +51,14 @@ public class Main extends JavaPlugin implements Listener {
 	public void onEnable() {
 		m = this;
 		MinigamesAPI.getAPI();
-		api = MinigamesAPI.setupAPI(this, "seabattle", IArena.class, new ArenasConfig(this), new IMessagesConfig(this), new IClassesConfig(this), new StatsConfig(this, false), new DefaultConfig(this, false), false);
+		api = MinigamesAPI.setupAPI(this, "seabattle", IArena.class, new ArenasConfig(this), new IMessagesConfig(this), new IClassesConfig(this), new StatsConfig(this, false), new DefaultConfig(this, false), true);
 		PluginInstance pinstance = MinigamesAPI.pinstances.get(this);
 		pinstance.addLoadedArenas(loadArenas(this, pinstance.getArenasConfig()));
 		Bukkit.getPluginManager().registerEvents(this, this);
 		pinstance.arenaSetup = new ArenaSetup();
+		IArenaListener listener = new IArenaListener(this, pinstance, "seabattle");
+		pinstance.setArenaListener(listener);
+		MinigamesAPI.getAPI().registerArenaListenerLater(this, listener);
 		pinstance.setAchievementGuiEnabled(true);
 
 		this.getConfig().addDefault("config.default_boat_health", boat_health);
