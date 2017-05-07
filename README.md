@@ -1,4 +1,4 @@
-SeaBattle [![Build Status](http://www.minigameslib.de/build.php?app=SeaBattle&major=1)](http://www.minigameslib.de/buildref.php?app=SeaBattle&major=1)
+SeaBattle [![Build Status](http://www.minigameslib.de/build.png?app=SeaBattle&major=1)](http://www.minigameslib.de/buildref.php?app=SeaBattle&major=1)
 =======
 
 SeaBattle game for spigot-minecraft using [MinigamesAPI](https://github.com/MysticCity/MinigamesAPI).
